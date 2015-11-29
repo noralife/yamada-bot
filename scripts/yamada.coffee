@@ -100,4 +100,4 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
    robot.respond /kindle/i, (msg) ->
      cheerio-httpcli.fetch 'http://ebook-sale.info/', {}, (err, $, res)->
        book =  $('header > h1 > a').first().text()
-       msg.send "今日の格安Kindle本は#{book}よ。買うしかないっしょ。"
+       msg.send "今日のKindle日替わりセール本は#{book}よ。買うしかないっしょ。"
