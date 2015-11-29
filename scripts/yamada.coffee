@@ -2,12 +2,14 @@ module.exports = (robot) ->
 
 
    robot.respond /help/i, (res) ->
-     res.send """
-       yamada-bot help          -- Display this help
-       yamada-bot ping          -- Check whether a bot is alive
-       yamada-bot how are you?  -- Ask condition of the bot
-       yamada-bot who are you?  -- Ask a bot name
-              """
+     res.send '''
+```
+yamada-bot help          -- Display this help
+yamada-bot ping          -- Check whether a bot is alive
+yamada-bot how are you?  -- Ask condition of the bot
+yamada-bot who are you?  -- Ask a bot name
+```
+              '''
    robot.respond /ping/i, (res) ->
      res.send "PONG"
 
