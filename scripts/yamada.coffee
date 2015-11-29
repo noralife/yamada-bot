@@ -6,6 +6,7 @@ module.exports = (robot) ->
 ```
 yamada-bot help          -- Display this help
 yamada-bot ping          -- Check whether a bot is alive
+yamada-bot weather       -- Ask today's weather
 yamada-bot how are you?  -- Ask condition of the bot
 yamada-bot who are you?  -- Ask a bot name
 yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot server
@@ -68,3 +69,12 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
    robot.hear /Good night/i, (res) ->
      res.emote "Have a good night"
 
+   robot.respond /weather/i, (msg) ->
+     request = msg.http('http://weather.livedoor.com/forecast/webservice/json/v1')
+                          .query(city: 130010)
+                          .get()
+     request (err, res, body) ->
+       json = JSON.parse body
+       weather = json['forecasts'][0]['telop']
+       max_temperature =  json['forecasts'][0]['temperature']['max']['celsius']
+       msg.send "今日の天気は#{weather}ってとこだな。最高気温は#{max_temperature}度らしいよ"
