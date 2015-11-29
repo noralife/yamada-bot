@@ -40,6 +40,7 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
        msg.send stdout if stdout?
        msg.send stderr if stderr?
 
+   # example for shell execution
    robot.respond /ping(.*)/, (msg) ->
      if msg.match[1].length < 1
        msg.send "PONG"
@@ -73,6 +74,7 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
    robot.hear /Good night/i, (res) ->
      res.emote "Have a good night"
 
+   # example for calling API
    robot.respond /weather/i, (msg) ->
      request = msg.http('http://weather.livedoor.com/forecast/webservice/json/v1')
                           .query(city: 130010)
@@ -83,6 +85,7 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
        max_temperature =  json['forecasts'][0]['temperature']['max']['celsius']
        msg.send "今日の天気は#{weather}ってとこだな。最高気温は#{max_temperature}度らしいよ。"
 
+   # example for scraping
    robot.respond /yahoo-news/i, (msg) ->
      msg.send "今のYahoo Newsな。詳細は自分で確認して。"
      cheerio-httpcli.fetch 'http://www.yahoo.co.jp/', {}, (err, $, res)->
