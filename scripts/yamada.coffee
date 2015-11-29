@@ -29,6 +29,13 @@ yamada-bot who are you?  -- Ask a bot name
      else
        res.send "YaMaDa"
 
+   robot.respond /vmstat/, (msg) ->
+     @exec = require('child_process').exec
+     @exec "vmstat", (error, stdout, stderr) ->
+       msg.send error if error?
+       msg.send stdout if stdout?
+       msg.send stderr if stderr?
+
    robot.hear /Good night/i, (res) ->
      res.emote "Have a good night"
 
