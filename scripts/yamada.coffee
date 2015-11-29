@@ -11,6 +11,7 @@ yamada-bot help          -- Display this help
 yamada-bot ping          -- Check whether a bot is alive
 yamada-bot weather       -- Ask today's weather
 yamada-bot yahoo-news    -- Display current yahoo news highlight
+yamada-bot kindle        -- Display daily kindle sale book
 yamada-bot how are you?  -- Ask condition of the bot
 yamada-bot who are you?  -- Ask a bot name
 yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot server
@@ -95,3 +96,8 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
      cheerio-httpcli.fetch 'http://www.yahoo.co.jp/', {}, (err, $, res)->
        $('ul.emphasis > li > a').each ()->
          msg.send "・#{$(this).text()}"
+
+   robot.respond /kindle/i, (msg) ->
+     cheerio-httpcli.fetch 'http://ebook-sale.info/', {}, (err, $, res)->
+       book =  $('header > h1 > a').first().text()
+       msg.send "今日の格安Kindle本は#{book}よ。買うしかないっしょ。"
