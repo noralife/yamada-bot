@@ -14,15 +14,16 @@ upon have been set.
 
 Before starting yamada-bot, you need install `nodejs`, `npm` and `redis`
 You can install them on MacOSX:
-    % brew install nodejs
-    % brew install npm
-    % brew install redis
+
+    $ brew install nodejs
+    $ brew install npm
+    $ brew install redis
 
 Now you can start yamada-bot locally by running:
 
-    % git clone https://github.com/noralife/yamada-bot.git
-    % cd yamada-bot
-    % bin/hubot
+    $ git clone https://github.com/noralife/yamada-bot.git
+    $ cd yamada-bot
+    $ bin/hubot
 
 You'll see some start up output and a prompt:
 
@@ -34,7 +35,7 @@ Then you can interact with yamada-bot by typing `yamada-bot help`.
     yamada-bot> yamada-bot help
     ...
 
-## Deploying to Linux
+### Deploying to Linux
 
 You also need `nodejs`, `npm` and `redis` for your Linux.
 Then, you can deploy yamada-bot to Linux.
@@ -59,7 +60,11 @@ The script is simple and should include :
     
     forever start -c coffee node_modules/.bin/hubot --name "yamada-bot" --adapter slack
 
-## Contributing
+### License
+
+Please refer to LICENSE.md
+
+### Contributing
 
 1. Fork it ( https://github.com/noralife/yamada-bot )
 2. Create your feature branch (`git checkout -b my-new-feature`)
