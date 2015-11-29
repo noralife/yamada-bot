@@ -81,9 +81,10 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
        json = JSON.parse body
        weather = json['forecasts'][0]['telop']
        max_temperature =  json['forecasts'][0]['temperature']['max']['celsius']
-       msg.send "今日の天気は#{weather}ってとこだな。最高気温は#{max_temperature}度らしいよ"
+       msg.send "今日の天気は#{weather}ってとこだな。最高気温は#{max_temperature}度らしいよ。"
 
    robot.respond /yahoo-news/i, (msg) ->
+     msg.send "今のYahoo Newsな。詳細は自分で確認して。"
      cheerio-httpcli.fetch 'http://www.yahoo.co.jp/', {}, (err, $, res)->
        $('ul.emphasis > li > a').each ()->
-         msg.send "#{$(this).text()}"
+         msg.send "・#{$(this).text()}"
