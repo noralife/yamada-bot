@@ -81,9 +81,13 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
                           .get()
      request (err, res, body) ->
        json = JSON.parse body
+       console.log(json)
+       console.log(json['forecasts'][0]['temperature'])
        weather = json['forecasts'][0]['telop']
-       max_temperature =  json['forecasts'][0]['temperature']['max']['celsius']
-       msg.send "今日の天気は#{weather}ってとこだな。最高気温は#{max_temperature}度らしいよ。"
+       max_temperature =  json['forecasts'][0]['temperature']['max']
+       message = "今日の天気は#{weather}ってとこだな。"
+       message += "最高気温は#{max_temperature['celsius']}度らしいよ。" if max_temperature?
+       msg.send message
 
    # example for scraping
    robot.respond /yahoo-news/i, (msg) ->
