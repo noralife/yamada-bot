@@ -43,9 +43,10 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
        if /^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(ip_addr)
          @exec = require('child_process').exec
          @exec "ping #{ip_addr} -c 5", (error, stdout, stderr) ->
-           msg.send error if error?
-           msg.send stdout if stdout?
-           msg.send stderr if stderr?
+           if stdout?
+             msg.send "```#{stdout}```"
+           else
+             msg.send "Something wrong"
        else
          msg.send "Omae IPv4 address mo wakaranaino"
 
@@ -57,9 +58,10 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
        if /^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(ip_addr)
          @exec = require('child_process').exec
          @exec "traceroute #{ip_addr}", (error, stdout, stderr) ->
-           msg.send error if error?
-           msg.send stdout if stdout?
-           msg.send stderr if stderr?
+           if stdout?
+             msg.send "```#{stdout}```"
+           else
+             msg.send "Something wrong"
        else
          msg.send "Omae IPv4 address mo wakaranaino"
 
