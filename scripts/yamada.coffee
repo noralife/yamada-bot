@@ -24,6 +24,7 @@
 #   yamada-bot who are you?  -- Ask a bot name
 #   yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot server
 #   yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
+#   yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
 #
 # Author:
 #   noralife
@@ -47,6 +48,7 @@ yamada-bot how are you?  -- Ask condition of the bot
 yamada-bot who are you?  -- Ask a bot name
 yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot server
 yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
+yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
 ```
               '''
    robot.respond /how are you?/i, (res) ->
@@ -102,6 +104,19 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
              msg.send "Something wrong"
        else
          msg.send "Omae IPv4 address mo wakaranaino"
+
+   robot.respond /whois(.*)/, (msg) ->
+     if msg.match[1].length < 1
+       msg.send "IPv4 address wo iretene"
+     else
+       ip_addr = msg.match[1].trim()
+       if /^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(ip_addr)
+         @exec = require('child_process').exec
+         @exec "whois #{ip_addr}", (error, stdout, stderr) ->
+           if stdout?
+             msg.send "```#{stdout}```"
+           else
+             msg.send "Something wrong"
 
    robot.hear /Good night/i, (res) ->
      res.emote "Have a good night"
