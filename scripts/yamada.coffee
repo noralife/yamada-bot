@@ -1,3 +1,34 @@
+# Description:
+#   Yamada bot helps to enjoy slack life
+#
+# Dependencies:
+#   $ npm install
+#
+# Configuration:
+#   You need to set following environment variables
+#     HUBOT_SLACK_TOKEN
+#     HUBOT_TWITTER_CONSUMER_KEY
+#     HUBOT_TWITTER_CONSUMER_SECRET
+#     HUBOT_TWITTER_ACCESS_TOKEN_KEY
+#     HUBOT_TWITTER_ACCESS_TOKEN_SECRET
+#     HUBOT_TWITTER_MENTION_QUERY
+#     HUBOT_TWITTER_MENTION_ROOM
+#
+# Commands:
+#   yamada-bot help          -- Display this help
+#   yamada-bot ping          -- Check whether a bot is alive
+#   yamada-bot weather       -- Ask today's weather
+#   yamada-bot yahoo-news    -- Display current yahoo news highlight
+#   yamada-bot kindle        -- Display daily kindle sale book
+#   yamada-bot how are you?  -- Ask condition of the bot
+#   yamada-bot who are you?  -- Ask a bot name
+#   yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot server
+#   yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
+#
+# Author:
+#   noralife
+#
+
 cheerio = require('cheerio')
 cheerio-httpcli = require('cheerio-httpcli')
 
