@@ -98,6 +98,6 @@ yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
          msg.send "・#{$(this).text()}"
 
    robot.respond /kindle/i, (msg) ->
-     cheerio-httpcli.fetch 'http://ebook-sale.info/', {}, (err, $, res)->
-       book =  $('header > h1 > a').first().text()
-       msg.send "今日のKindle日替わりセール本は#{book}よ。買うしかないっしょ。"
+     cheerio-httpcli.fetch 'http://www.amazon.co.jp/b?node=3338926051', {}, (err, $, res)->
+       book =  $('h3').text()
+       msg.send "今日のKindle日替わりセール本は「#{book}」よ。買うしかないっしょ。"
