@@ -22,6 +22,7 @@
 #   yamada-bot kindle        -- Display daily kindle sale book
 #   yamada-bot how are you?  -- Ask condition of the bot
 #   yamada-bot who are you?  -- Ask a bot name
+#   yamada-bot say [SOMETHING]       -- Yamada-bot say SOMETHING in #general
 #   yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot server
 #   yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
 #   yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
@@ -147,3 +148,6 @@ yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
      cheerio-httpcli.fetch 'http://www.amazon.co.jp/b?node=3338926051', {}, (err, $, res)->
        book =  $('h3').text()
        msg.send "今日のKindle日替わりセール本は「#{book}」よ。買うしかないっしょ。"
+
+   robot.respond /say (.*)/i, (msg) ->
+     robot.send {room: "#general"}, msg.match[1].trim()
