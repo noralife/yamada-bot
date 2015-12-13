@@ -33,6 +33,8 @@
 
 cheerio = require('cheerio')
 cheerio-httpcli = require('cheerio-httpcli')
+cron = require('cron').CronJob
+request = require('request');
 
 module.exports = (robot) ->
 
@@ -123,34 +125,97 @@ yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
   robot.hear /Good night/i, (res) ->
     res.emote "Have a good night"
 
+  getWeather = (callback) ->
+    options = {
+      url: 'http://weather.livedoor.com/forecast/webservice/json/v1?city=130010',
+      json: true
+    }
+    request.get options, (error, response, json) ->
+      if !error && response.statusCode == 200
+        weathers = []
+        for forecast in json.forecasts
+          weather = []
+          weather["telop"] = forecast.telop
+          weather["maxtemp"] = forecast.temperature.max.celsius if forecast.temperature.max?
+          weather["mintemp"] = forecast.temperature.min.celsius if forecast.temperature.min?
+          weathers.push weather
+        callback(weathers)
+      else
+        console.log('error: '+ response.statusCode)
+
+  getKindleBook = (callback) ->
+    cheerio-httpcli.fetch 'http://www.amazon.co.jp/b?node=3338926051', {}, (err, $, res)->
+      book =  $('h3').text()
+      callback(book)
+
+  getYahooNews = (callback) ->
+    cheerio-httpcli.fetch 'http://www.yahoo.co.jp/', {}, (err, $, res)->
+      items = []
+      $('ul.emphasis > li > a').each ()->
+        items.push($(this).text())
+      callback(items)
+
   # example for calling API
   robot.respond /weather/i, (msg) ->
-    request = msg.http('http://weather.livedoor.com/forecast/webservice/json/v1').query(city: 130010).get()
-    request (err, res, body) ->
-      json = JSON.parse body
-      weather = json['forecasts'][0]['telop']
-      max_temperature =  json['forecasts'][0]['temperature']['max']
-      message = "今日の天気は#{weather}ってとこだな。"
-      message += "最高気温は#{max_temperature['celsius']}度らしいよ。" if max_temperature?
+    getWeather (weathers) ->
+      console.log(weathers)
+      message = "今日の天気は#{weathers[0]['telop']}ってとこだな。"
+      message += "最高気温は#{weathers[0]['maxtemp']}度らしいよ。" if weathers[0]['maxtemp']?
+      message += "\nちなみに明日は#{weathers[1]['telop']}よ。"
       msg.send message
 
   # example for scraping
   robot.respond /yahoo-news/i, (msg) ->
-    msg.send "今のYahoo Newsな。詳細は自分で確認して。"
-    cheerio-httpcli.fetch 'http://www.yahoo.co.jp/', {}, (err, $, res)->
-      $('ul.emphasis > li > a').each ()->
-        msg.send "・#{$(this).text()}"
+    getYahooNews (items) ->
+      msg.send "Yahoo Newsな。詳細は自分で確認して。"
+      for item in items
+        msg.send "・#{item}"
 
   robot.respond /kindle/i, (msg) ->
-    cheerio-httpcli.fetch 'http://www.amazon.co.jp/b?node=3338926051', {}, (err, $, res)->
-      book =  $('h3').text()
-      msg.send "今日のKindle日替わりセール本は「#{book}」よ。買うしかないっしょ。"
+    getKindleBook (book) ->
+      msg.send "今日のKindle日替わりセール本は「#{book}」よ。買うしかないっしょ!!"
 
   robot.respond /say (.*)/i, (msg) ->
     robot.send {room: "#general"}, msg.match[1].trim()
+
+  robot.respond /all/i, (msg) ->
+    getYahooNews (items) ->
+      robot.send {room: "#bot"}, "[Yahoo News]" 
+      for item in items
+        robot.send {room: "#bot"}, "・#{item}"
+      getKindleBook (book) ->
+        robot.send {room: "#bot"}, "[Kindleセール本]\n#{book}"
+        getWeather (weathers) ->
+          message = "[天気]\n今日: #{weathers[0]['telop']}"
+          message += " - 最高気温は#{weathers[0]['maxtemp']}度" if weathers[0]['maxtemp']?
+          message += "\n明日: #{weathers[1]['telop']}。"
+          message += " - 最高気温は#{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
+          robot.send {room: "#bot"}, message
 
   robot.respond /hulu/i, (msg) ->
     msg.send "Huluのもうすぐ配信予定の映画な。いつ公開されるかはしらん。"
     cheerio-httpcli.fetch 'http://www.hulu.jp/coming/movies', {}, (err, $, res)->
       $('.coming-soon-title').each ()->
         msg.send "・#{$(this).text()}"
+
+  # cron
+  new cron '00 00 7 * * *', () =>
+    ch = "#general"
+    robot.send {room: ch}, "おはよう。今日も飛ばしていこうぜ。"
+    getYahooNews (items) ->
+      robot.send {room: ch}, "[Yahoo News]" 
+      for item in items
+        robot.send {room: ch}, "・#{item}"
+      getKindleBook (book) ->
+        robot.send {room: ch}, "[Kindleセール本]\n#{book}"
+        getWeather (weathers) ->
+          message = "[天気]\n今日: #{weathers[0]['telop']}"
+          message += " - 最高気温は#{weathers[0]['maxtemp']}度" if weathers[0]['maxtemp']?
+          message += "\n明日: #{weathers[1]['telop']}"
+          message += " - 最高気温は#{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
+          robot.send {room: ch}, message
+  , null, true, "Asia/Tokyo"
+
+  new cron '00 30 17 * * *', () =>
+    robot.send {room: "#general"}, "社畜の通過点"
+  , null, true, "Asia/Tokyo"
