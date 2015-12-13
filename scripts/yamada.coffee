@@ -20,6 +20,7 @@
 #   yamada-bot weather       -- Ask today's weather
 #   yamada-bot yahoo-news    -- Display current yahoo news highlight
 #   yamada-bot kindle        -- Display daily kindle sale book
+#   yamada-bot train         -- Display train status
 #   yamada-bot how are you?  -- Ask condition of the bot
 #   yamada-bot who are you?  -- Ask a bot name
 #   yamada-bot say [SOMETHING]       -- Yamada-bot say SOMETHING in #general
@@ -47,6 +48,7 @@ yamada-bot ping          -- Check whether a bot is alive
 yamada-bot weather       -- Ask today's weather
 yamada-bot yahoo-news    -- Display current yahoo news highlight
 yamada-bot kindle        -- Display daily kindle sale book
+yamada-bot train         -- Display train status
 yamada-bot how are you?  -- Ask condition of the bot
 yamada-bot who are you?  -- Ask a bot name
 yamada-bot say [SOMETHING]       -- Yamada-bot say SOMETHING in general
@@ -197,6 +199,18 @@ yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
     cheerio-httpcli.fetch 'http://www.hulu.jp/coming/movies', {}, (err, $, res)->
       $('.coming-soon-title').each ()->
         msg.send "・#{$(this).text()}"
+
+  robot.respond /train/i, (msg) ->
+    cheerio-httpcli.fetch 'http://api.tetsudo.com/traffic/atom.xml?kanto', {}, (err, $, res)->
+      trains = []
+      $('entry > title').each ()->
+        trains.push($(this).text())
+      if trains.length > 0
+        msg.send "遅延してる電車な。"
+        for train in trains
+          msg.send "・#{train}"
+      else
+        msg.send "遅延は特になし。"
 
   # cron
   new cron '00 00 7 * * *', () =>
