@@ -21,8 +21,6 @@
 #   yamada-bot yahoo-news    -- Display current yahoo news highlight
 #   yamada-bot kindle        -- Display daily kindle sale book
 #   yamada-bot train         -- Display train status
-#   yamada-bot how are you?  -- Ask condition of the bot
-#   yamada-bot who are you?  -- Ask a bot name
 #   yamada-bot say [SOMETHING]       -- Yamada-bot say SOMETHING in #general
 #   yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot
 #   yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot
@@ -49,36 +47,12 @@ yamada-bot weather       -- Ask today's weather
 yamada-bot yahoo-news    -- Display current yahoo news highlight
 yamada-bot kindle        -- Display daily kindle sale book
 yamada-bot train         -- Display train status
-yamada-bot how are you?  -- Ask condition of the bot
-yamada-bot who are you?  -- Ask a bot name
 yamada-bot say [SOMETHING]       -- Yamada-bot say SOMETHING in general
 yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot server
 yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
 yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
 ```
               '''
-  robot.respond /how are you?/i, (res) ->
-    rand = Math.floor(Math.random() * 10) + 1
-    if rand > 7
-      res.send "I'm fine"
-    else if rand >3
-      res.send "I'm tired"
-    else
-      res.send "pardon?"
-
-  robot.respond /who are you?/i, (res) ->
-    rand = Math.floor(Math.random() * 10) + 1
-    if rand > 7
-      res.send "You know me..."
-    else
-      res.send "YaMaDa"
-
-  robot.respond /vmstat/, (msg) ->
-    @exec = require('child_process').exec
-    @exec "vmstat", (error, stdout, stderr) ->
-      msg.send error if error?
-      msg.send stdout if stdout?
-      msg.send stderr if stderr?
 
   # example for shell execution
   robot.respond /ping(.*)/, (msg) ->
@@ -123,9 +97,6 @@ yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
             msg.send "```#{stdout}```"
           else
             msg.send "Something wrong"
-
-  robot.hear /Good night/i, (res) ->
-    res.emote "Have a good night"
 
   getWeather = (callback) ->
     options = {
@@ -179,26 +150,6 @@ yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
 
   robot.respond /say (.*)/i, (msg) ->
     robot.send {room: "#general"}, msg.match[1].trim()
-
-  robot.respond /all/i, (msg) ->
-    getYahooNews (items) ->
-      robot.send {room: "#bot"}, "[Yahoo News]" 
-      for item in items
-        robot.send {room: "#bot"}, "・#{item}"
-      getKindleBook (book) ->
-        robot.send {room: "#bot"}, "[Kindleセール本]\n#{book}"
-        getWeather (weathers) ->
-          message = "[天気]\n今日: #{weathers[0]['telop']}"
-          message += " - 最高気温は#{weathers[0]['maxtemp']}度" if weathers[0]['maxtemp']?
-          message += "\n明日: #{weathers[1]['telop']}。"
-          message += " - 最高気温は#{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
-          robot.send {room: "#bot"}, message
-
-  robot.respond /hulu/i, (msg) ->
-    msg.send "Huluのもうすぐ配信予定の映画な。いつ公開されるかはしらん。"
-    cheerio-httpcli.fetch 'http://www.hulu.jp/coming/movies', {}, (err, $, res)->
-      $('.coming-soon-title').each ()->
-        msg.send "・#{$(this).text()}"
 
   robot.respond /train/i, (msg) ->
     cheerio-httpcli.fetch 'http://api.tetsudo.com/traffic/atom.xml?kanto', {}, (err, $, res)->
