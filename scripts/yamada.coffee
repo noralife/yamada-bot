@@ -15,16 +15,16 @@
 #     HUBOT_TWITTER_MENTION_ROOM
 #
 # Commands:
-#   yamada-bot help          -- Display this help
-#   yamada-bot ping          -- Check whether a bot is alive
-#   yamada-bot weather       -- Ask today's weather
-#   yamada-bot yahoo-news    -- Display current yahoo news highlight
-#   yamada-bot kindle        -- Display daily kindle sale book
-#   yamada-bot train         -- Display train status
-#   yamada-bot say [SOMETHING]       -- Yamada-bot say SOMETHING in #general
-#   yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot
-#   yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot
-#   yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
+#   yamabo help          -- Display this help
+#   yamabo ping          -- Check whether a bot is alive
+#   yamabo weather       -- Ask today's weather
+#   yamabo yahoo-news    -- Display current yahoo news highlight
+#   yamabo kindle        -- Display daily kindle sale book
+#   yamabo train         -- Display train status
+#   yamabo say [SOMETHING]       -- Yamada-bot say SOMETHING in #general
+#   yamabo ping [IPADDR]         -- Execute ping [IPADDR] from bot
+#   yamabo traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot
+#   yamabo whois [IPADDR]        -- Execute whois [IPADDR]
 #
 # Author:
 #   noralife
@@ -41,16 +41,16 @@ module.exports = (robot) ->
   robot.respond /help/i, (res) ->
     res.send '''
 ```
-yamada-bot help          -- Display this help
-yamada-bot ping          -- Check whether a bot is alive
-yamada-bot weather       -- Ask today's weather
-yamada-bot yahoo-news    -- Display current yahoo news highlight
-yamada-bot kindle        -- Display daily kindle sale book
-yamada-bot train         -- Display train status
-yamada-bot say [SOMETHING]       -- Yamada-bot say SOMETHING in general
-yamada-bot ping [IPADDR]         -- Execute ping [IPADDR] from bot server
-yamada-bot traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
-yamada-bot whois [IPADDR]        -- Execute whois [IPADDR]
+yamabo help          -- Display this help
+yamabo ping          -- Check whether a bot is alive
+yamabo weather       -- Ask today's weather
+yamabo yahoo-news    -- Display current yahoo news highlight
+yamabo kindle        -- Display daily kindle sale book
+yamabo train         -- Display train status
+yamabo say [SOMETHING]       -- Yamada-bot say SOMETHING in general
+yamabo ping [IPADDR]         -- Execute ping [IPADDR] from bot server
+yamabo traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
+yamabo whois [IPADDR]        -- Execute whois [IPADDR]
 ```
               '''
 
