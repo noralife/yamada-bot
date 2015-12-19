@@ -2,4 +2,3 @@ node_modules
 .DS_Store*
 .hubot_history
 yamada-bot.sh
-run.sh
