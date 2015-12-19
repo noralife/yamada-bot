@@ -181,6 +181,6 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
           robot.send {room: ch}, message
   , null, true, "Asia/Tokyo"
 
-  new cron '00 30 17 * * *', () =>
+  new cron '00 30 17 * * 1-5', () =>
     robot.send {room: "#general"}, "社畜の通過点"
   , null, true, "Asia/Tokyo"
