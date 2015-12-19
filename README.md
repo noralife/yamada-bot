@@ -58,6 +58,11 @@ The script is simple and should include :
     export PATH="node_modules/.bin:node_modules/hubot/node_modules/.bin:$PATH"
     export HUBOT_SLACK_TOKEN=<TOKEN_ON_SLACK_INTEGRATION_PAGE>
     
+    if forever list | grep slack
+    then
+      forever stop 0
+    fi
+
     forever start -c coffee node_modules/.bin/hubot --name "yamada-bot" --adapter slack
 
 ### License

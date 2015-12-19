@@ -7,12 +7,6 @@
 # Configuration:
 #   You need to set following environment variables
 #     HUBOT_SLACK_TOKEN
-#     HUBOT_TWITTER_CONSUMER_KEY
-#     HUBOT_TWITTER_CONSUMER_SECRET
-#     HUBOT_TWITTER_ACCESS_TOKEN_KEY
-#     HUBOT_TWITTER_ACCESS_TOKEN_SECRET
-#     HUBOT_TWITTER_MENTION_QUERY
-#     HUBOT_TWITTER_MENTION_ROOM
 #
 # Commands:
 #   yamabo help          -- Display this help
