@@ -7,12 +7,12 @@ watch = require 'gulp-watch'
 
 # test task
 gulp.task 'test', ->
-   gulp.src(['scripts/*.coffee', 'test/*.coffee']) 
+  gulp.src(['scripts/*.coffee', 'test/*.coffee'])
     .pipe mocha {reporter: 'spec'}
 
 gulp.task 'lint', ->
-   gulp.src(['scripts/*.coffee', 'test/*.coffee'])
-    .pipe coffeelint() 
+  gulp.src(['scripts/*.coffee', 'test/*.coffee'])
+    .pipe coffeelint()
     .pipe coffeelint.reporter()
 
 # watch task
