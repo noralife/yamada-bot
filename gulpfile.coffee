@@ -5,16 +5,6 @@ coffeelint = require 'gulp-coffeelint'
 mocha = require 'gulp-mocha'
 watch = require 'gulp-watch'
 
-gulp.task 'default', ->
-  gulp.src(['scripts/*.coffee', 'test/*.coffee'])
-    .pipe coffeelint()
-    .pipe coffeelint.reporter()
-    .pipe mocha {reporter: 'spec'}
-    .once 'error', () ->
-      process.exit(1);
-    .once 'end', () ->
-      process.exit();
-
 # test task
 gulp.task 'test', ->
   gulp.src(['scripts/*.coffee', 'test/*.coffee'])
