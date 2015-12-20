@@ -1,4 +1,5 @@
-gulp = require 'gulp';
+gulp = require 'gulp'
+coffeelint = require 'gulp-coffeelint'
 
 # test tools
 mocha = require 'gulp-mocha'
@@ -8,6 +9,11 @@ watch = require 'gulp-watch'
 gulp.task 'test', ->
    gulp.src(['scripts/*.coffee', 'test/*.coffee']) 
     .pipe mocha {reporter: 'spec'}
+
+gulp.task 'lint', ->
+   gulp.src(['scripts/*.coffee', 'test/*.coffee'])
+    .pipe coffeelint() 
+    .pipe coffeelint.reporter()
 
 # watch task
 gulp.task 'watch', ->
