@@ -27,7 +27,7 @@
 cheerio = require('cheerio')
 cheerio-httpcli = require('cheerio-httpcli')
 cron = require('cron').CronJob
-request = require('request');
+request = require('request')
 
 module.exports = (robot) ->
 
@@ -158,11 +158,12 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
         msg.send "遅延は特になし。"
 
   # cron
-  new cron '00 00 7 * * *', () =>
+  new cron '00 00 7 * * *', () ->
     ch = "#general"
     robot.send {room: ch}, "おはよう。今日も飛ばしていこうぜ。"
     getYahooNews (items) ->
-      robot.send {room: ch}, "[Yahoo News]" 
+      robot.send {room: ch}, "[Yahoo News]"
+
       for item in items
         robot.send {room: ch}, "・#{item}"
       getKindleBook (book) ->
@@ -175,6 +176,6 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
           robot.send {room: ch}, message
   , null, true, "Asia/Tokyo"
 
-  new cron '00 30 17 * * 1-5', () =>
+  new cron '00 30 17 * * 1-5', () ->
     robot.send {room: "#general"}, "社畜の通過点"
   , null, true, "Asia/Tokyo"
