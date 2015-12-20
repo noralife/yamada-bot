@@ -1,9 +1,9 @@
 expect = require('chai').expect
 
-Robot       = require('hubot/src/robot')  
+Robot       = require('hubot/src/robot')
 TextMessage = require('hubot/src/message').TextMessage
 
-describe 'ping', ->  
+describe 'ping', ->
   robot = null
   user = null
   adapter = null
