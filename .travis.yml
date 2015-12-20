@@ -3,7 +3,7 @@ node_js:
   - "0.10"
 before_script:
   - npm install -g gulp
-script: gulp test
+script: gulp lint
 cache:
   directories:
     - node_modules
