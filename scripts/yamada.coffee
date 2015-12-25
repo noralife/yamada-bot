@@ -149,7 +149,8 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
     cheerio-httpcli.fetch 'http://api.tetsudo.com/traffic/atom.xml?kanto', {}, (err, $, res)->
       trains = []
       $('entry > title').each ()->
-        trains.push($(this).text())
+        if /JR東日本|東京メトロ|都営地下鉄|東武鉄道|西武鉄道|京成電鉄|京王電鉄|小田急電鉄|東急電鉄|京急電鉄|横浜市営地下鉄|りんかい線|つくばエクスプレス|ゆりかもめ|東京モノレール|日暮里・舎人ライナー/.test($(this).text())
+          trains.push($(this).text())
       if trains.length > 0
         msg.send "遅延してる電車な。"
         for train in trains
