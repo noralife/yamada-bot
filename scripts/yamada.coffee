@@ -122,6 +122,14 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
         items.push($(this).text())
       callback(items)
 
+  getDelayedTrain = (callback) ->
+    cheerio-httpcli.fetch 'http://api.tetsudo.com/traffic/atom.xml?kanto', {}, (err, $, res)->
+      trains = []
+      $('entry > title').each ()->
+        if /JR東日本|東京メトロ|都営地下鉄|東武鉄道|西武鉄道|京成電鉄|京王電鉄|小田急電鉄|東急電鉄|京急電鉄|横浜市営地下鉄|りんかい線|つくばエクスプレス|ゆりかもめ|東京モノレール|日暮里・舎人ライナー/.test($(this).text())
+          trains.push($(this).text())
+      callback(trains)
+
   # example for calling API
   robot.respond /weather/i, (msg) ->
     getWeather (weathers) ->
@@ -146,11 +154,7 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
     robot.send {room: "#general"}, msg.match[1].trim()
 
   robot.respond /train/i, (msg) ->
-    cheerio-httpcli.fetch 'http://api.tetsudo.com/traffic/atom.xml?kanto', {}, (err, $, res)->
-      trains = []
-      $('entry > title').each ()->
-        if /JR東日本|東京メトロ|都営地下鉄|東武鉄道|西武鉄道|京成電鉄|京王電鉄|小田急電鉄|東急電鉄|京急電鉄|横浜市営地下鉄|りんかい線|つくばエクスプレス|ゆりかもめ|東京モノレール|日暮里・舎人ライナー/.test($(this).text())
-          trains.push($(this).text())
+    getDelayedTrain (trains) ->
       if trains.length > 0
         msg.send "遅延してる電車な。"
         for train in trains
@@ -175,6 +179,13 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
           message += "\n明日: #{weathers[1]['telop']}"
           message += " - 最高気温は#{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
           robot.send {room: ch}, message
+          getDelayedTrain (trains) ->
+            robot.send {room: ch}, "[電車遅延情報]"
+            if trains.length > 0
+              for train in trains
+                robot.send {room: ch}, "・#{train}"
+            else
+              robot.send {room: ch}, "遅延なし"
   , null, true, "Asia/Tokyo"
 
   new cron '00 30 17 * * 1-5', () ->
