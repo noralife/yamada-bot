@@ -130,6 +130,14 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
           trains.push($(this).text())
       callback(trains)
 
+  isHoliday = (holidayCallback, elseCallback) ->
+    cheerio-httpcli.fetch 'http://s-proj.com/utils/checkHoliday.php?kind=h', {}, (err, $, res)->
+      date = res.body.toString('utf-8')
+      if date is 'holiday'
+        holidayCallback()
+      else
+        elseCallback()
+
   # example for calling API
   robot.respond /weather/i, (msg) ->
     getWeather (weathers) ->
@@ -189,5 +197,8 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
   , null, true, "Asia/Tokyo"
 
   new cron '00 30 17 * * 1-5', () ->
-    robot.send {room: "#general"}, "社畜の通過点"
+    isHoliday () ->
+      robot.send {room: "#general"}, "社畜の通過... おっと休日だったか"
+    , () ->
+      robot.send {room: "#general"}, "社畜の通過点"
   , null, true, "Asia/Tokyo"
