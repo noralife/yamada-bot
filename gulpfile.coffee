@@ -10,9 +10,9 @@ gulp.task 'test', ->
   gulp.src(['scripts/*.coffee', 'test/*.coffee'])
     .pipe mocha {reporter: 'spec'}
     .once 'error', () ->
-      process.exit(1);
+      process.exit(1)
     .once 'end', () ->
-      process.exit();
+      process.exit()
 
 gulp.task 'lint', ->
   gulp.src(['scripts/*.coffee', 'test/*.coffee'])
