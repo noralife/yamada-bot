@@ -42,6 +42,7 @@ yamabo yahoo-news    -- Display current yahoo news highlight
 yamabo kindle        -- Display daily kindle sale book
 yamabo train         -- Display train status
 yamabo say [SOMETHING]       -- Yamada-bot say SOMETHING in general
+yamabo emotion [SOMETHING]   -- Analyze [SOMETHING] using emotion API
 yamabo ping [IPADDR]         -- Execute ping [IPADDR] from bot server
 yamabo traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
 yamabo whois [IPADDR]        -- Execute whois [IPADDR]
@@ -169,6 +170,18 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
           msg.send "・#{train}"
       else
         msg.send "遅延は特になし。"
+
+  robot.respond /emotion (.*)/i, (msg) ->
+    text = msg.match[1].trim()
+    apikey = process.env.METADATA_API_KEY
+    options = {
+      url: 'http://ap.mextractr.net/ma9/emotion_analyzer?out=json&text=' + text + '&apikey=' + apikey,
+      json: true
+    }
+    request.get options, (error, response, json) ->
+      if !error && response.statusCode == 200
+        json.analyzed_text = decodeURI(json.analyzed_text)
+        msg.send("```\n" + JSON.stringify(json, null, "\t") + "\n```")
 
   # cron
   new cron '00 00 7 * * *', () ->
