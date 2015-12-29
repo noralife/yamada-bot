@@ -132,7 +132,7 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
       callback(trains)
 
   isHoliday = (holidayCallback, elseCallback) ->
-    cheerio-httpcli.fetch 'http://s-proj.com/utils/checkHoliday.php?kind=h', {}, (err, $, res)->
+    cheerio-httpcli.fetch 'http://s-proj.com/utils/checkHoliday.php?kind=h&opt=gov', {}, (err, $, res)->
       date = res.body.toString('utf-8')
       if date is 'holiday'
         holidayCallback()
