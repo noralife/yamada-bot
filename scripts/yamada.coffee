@@ -19,6 +19,7 @@
 #   yamabo ping [IPADDR]         -- Execute ping [IPADDR] from bot
 #   yamabo traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot
 #   yamabo whois [IPADDR]        -- Execute whois [IPADDR]
+#   yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
 #
 # Author:
 #   noralife
@@ -46,6 +47,7 @@ yamabo emotion [SOMETHING]   -- Analyze [SOMETHING] using emotion API
 yamabo ping [IPADDR]         -- Execute ping [IPADDR] from bot server
 yamabo traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
 yamabo whois [IPADDR]        -- Execute whois [IPADDR]
+yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
 ```
               '''
 
@@ -182,6 +184,59 @@ yamabo whois [IPADDR]        -- Execute whois [IPADDR]
       if !error && response.statusCode == 200
         json.analyzed_text = decodeURI(json.analyzed_text)
         msg.send("```\n" + JSON.stringify(json, null, "\t") + "\n```")
+
+  addReaction = (name, ch, ts, callback) ->
+    options = {
+      url: 'https://slack.com/api/reactions.add'
+      qs: {
+        'token': process.env.HUBOT_SLACK_TOKEN
+        'name': name
+        'channel': ch
+        'timestamp': ts
+      }
+    }
+    request.post options, (err, res, body) ->
+      callback(JSON.parse(body))
+      if err? or res.statusCode isnt 200
+        robot.logger.error("Failed to add emoji reaction #{JSON.stringify(err)}")
+
+  postMessage = (msg, text, callback) ->
+    options = {
+      url: 'https://slack.com/api/chat.postMessage'
+      qs: {
+        'token': process.env.HUBOT_SLACK_TOKEN
+        'channel': msg.message.rawMessage.channel
+        'text': text
+        'username': 'yamabo'
+        'as_user': true
+      }
+    }
+    request.post options, (err, res, body) ->
+      callback(JSON.parse(body))
+      if err? or res.statusCode isnt 200
+        robot.logger.error("Failed to post comment #{JSON.stringify(err)}")
+
+  postMessages = (msg, texts) ->
+    text = texts.shift()
+    if text?
+      postMessage msg, text, (body) ->
+        addReactions(["+1", "scream"], body.channel, body.ts)
+        postMessages(msg, texts)
+
+  addReactions = (names, ch, ts) ->
+    name = names.shift()
+    if name?
+      addReaction name, ch, ts, (body) ->
+        addReactions names, ch, ts
+
+  robot.respond /vote (.*)/i, (msg) ->
+    params = msg.match[1].trim().split(" ")
+    title = params[0]
+    items = params.slice(1).join(" ").split(",")
+    msg.send "#{title}の投票するよ"
+    msg.send "集計するときは-1を忘れずに(yamaboを除く)"
+    msg.send "-----------------------------------------"
+    postMessages msg, items
 
   # cron
   new cron '00 00 7 * * *', () ->
