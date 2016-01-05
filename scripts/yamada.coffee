@@ -270,3 +270,10 @@ yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
     , () ->
       robot.send {room: "#general"}, "社畜の通過点...カイタはあと30分な"
   , null, true, "Asia/Tokyo"
+
+  new cron '00 00 18 * * 1-5', () ->
+    isHoliday () ->
+      null
+    , () ->
+      robot.send {room: "#general"}, "カイタも帰れよ。社畜かよ。"
+  , null, true, "Asia/Tokyo"

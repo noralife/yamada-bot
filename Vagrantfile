@@ -6,8 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.hostname = "ubuntu"
-  config.vm.network "private_network", ip: "192.168.10.118"
-  config.vbguest.auto_update = false
+  #config.vm.network "private_network", ip: "192.168.10.118"
+  #config.vbguest.auto_update = false
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
     sudo apt-get install -y vim git tree
