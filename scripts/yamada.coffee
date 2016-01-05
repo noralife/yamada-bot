@@ -268,5 +268,5 @@ yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
     isHoliday () ->
       robot.send {room: "#general"}, "社畜の通過... おっと休日だったか"
     , () ->
-      robot.send {room: "#general"}, "社畜の通過点"
+      robot.send {room: "#general"}, "社畜の通過点...カイタはあと30分な"
   , null, true, "Asia/Tokyo"
