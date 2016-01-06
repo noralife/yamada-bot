@@ -62,7 +62,7 @@ askWhereDeliver = (response, convo) ->
     convo.next()
 
 # yamabo help
-controller.hears ['help'], 'direct_message,direct_mention,mention', (bot,message) ->
+controller.hears ['^help'], 'direct_message,direct_mention,mention', (bot,message) ->
   bot.reply message, '''
 ```
 yamabo help          -- Display this help
@@ -81,7 +81,7 @@ yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
                      '''
 
 # yamabo ping/yamabo ping 8.8.8.8
-controller.hears ['ping(.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^ping(.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
   matches = message.text.match /ping(.*)/i
   if matches[1].length < 1
     bot.reply message, 'PONG'
@@ -98,7 +98,7 @@ controller.hears ['ping(.*)'], 'direct_message,direct_mention,mention', (bot, me
       bot.reply message, 'Omae IPv4 address mo wakaranaino'
 
 # yamabo traceroute 8.8.8.8
-controller.hears ['traceroute(.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^traceroute(.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
   matches = message.text.match /traceroute(.*)/i
   if matches[1].length < 1
     bot.reply message, 'IPv4 address wo iretene'
@@ -115,7 +115,7 @@ controller.hears ['traceroute(.*)'], 'direct_message,direct_mention,mention', (b
       bot.reply message, 'Omae IPv4 address mo wakaranaino'
 
 # yamabo whois 8.8.8.8
-controller.hears ['whois(.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^whois(.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
   matches = message.text.match /whois(.*)/i
   if matches[1].length < 1
     bot.reply message, 'IPv4 address wo iretene'
@@ -132,7 +132,7 @@ controller.hears ['whois(.*)'], 'direct_message,direct_mention,mention', (bot, m
       bot.reply message, 'Omae IPv4 address mo wakaranaino'
 
 # yamabo weather
-controller.hears ['weather'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^weather'], 'direct_message,direct_mention,mention', (bot, message) ->
   helper.getWeather (weathers) ->
     res  = "今日の天気は#{weathers[0]['telop']}ってとこだな。"
     res += "最高気温は#{weathers[0]['maxtemp']}度らしいよ。" if weathers[0]['maxtemp']?
@@ -141,24 +141,24 @@ controller.hears ['weather'], 'direct_message,direct_mention,mention', (bot, mes
     bot.reply message, res
 
 # yamabo yahoo-news
-controller.hears ['yahoo-news'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^yahoo-news'], 'direct_message,direct_mention,mention', (bot, message) ->
   helper.getYahooNews (items) ->
     bot.reply message, "Yahoo Newsな。詳細は自分で確認して。"
     for item in items
       bot.reply message, "・#{item}"
 
 # yamabo kindle
-controller.hears ['kindle'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^kindle'], 'direct_message,direct_mention,mention', (bot, message) ->
   helper.getKindleBook (book) ->
     bot.reply message, "今日のKindle日替わりセール本は「#{book}」よ。買うしかないっしょ!!"
 
 # yamabo say something
-controller.hears ['say (.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^say (.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
   matches = message.text.match /say (.*)/i
   bot.say { channel: process.env.CHANNEL, text: matches[1].trim()}
 
 # yamabo say train
-controller.hears ['train'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^train'], 'direct_message,direct_mention,mention', (bot, message) ->
   helper.getDelayedTrain (trains) ->
     if trains.length > 0
       bot.reply message, '遅延してる電車な。'
@@ -168,7 +168,7 @@ controller.hears ['train'], 'direct_message,direct_mention,mention', (bot, messa
       bot.reply message, '遅延は特になし。'
 
 # yamabo emotion something
-controller.hears ['emotion (.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^emotion (.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
   matches = message.text.match /emotion (.*)/i
   text = matches[1].trim()
   apikey = process.env.METADATA_API_KEY
@@ -182,7 +182,7 @@ controller.hears ['emotion (.*)'], 'direct_message,direct_mention,mention', (bot
       bot.reply message, "```\n" + JSON.stringify(json, null, "\t") + "\n```"
 
 # yamabo vote title item1,item2,item3
-controller.hears ['vote (.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
+controller.hears ['^vote (.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
   matches = message.text.match /vote (.*)/i
   params = matches[1].trim().split(" ")
   title = params[0]
