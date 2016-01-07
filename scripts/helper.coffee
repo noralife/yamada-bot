@@ -128,7 +128,7 @@ module.exports =
       getPos = (names, callback, final) ->
         name = names.pop()
         if name?
-          name = name.replace(/駅/, "")
+          name = name.replace(/駅/, "").trim()
           db.get "SELECT * FROM stations WHERE station_name LIKE ?", name, (err, row) ->
             callback err, row
             getPos names, callback, final

@@ -194,6 +194,7 @@ controller.hears ['^vote (.*)'], 'direct_message,direct_mention,mention', (bot, 
   bot.reply message, "-----------------------------------------"
   helper.postMessages message, items
 
+# yamabo center eki1,eki2,eki3
 controller.hears ['^center (.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
   matches = message.text.match /center (.*)/i
   params  = matches[1].trim().split(" ")
