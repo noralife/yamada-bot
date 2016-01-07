@@ -239,8 +239,9 @@ new cron '00 30 17 * * 1-5', () ->
 
 # evening cron 2
 new cron '00 00 18 * * 1-5', () ->
+  ch = process.env.CHANNEL
   isHoliday () ->
     null
   , () ->
-    robot.send {room: "#general"}, "カイタも帰れよ。社畜かよ。"
+    bot.say { channel: ch, text: 'カイタも帰れよ。社畜かよ。' }
 , null, true, "Asia/Tokyo"
