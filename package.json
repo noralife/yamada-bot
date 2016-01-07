@@ -21,8 +21,10 @@
     "cheerio": "^0.19.0",
     "cheerio-httpcli": "^0.3.8",
     "cron": "^1.1.0",
+    "csv-parse": "^1.0.1",
     "gulp": "^3.9.0",
-    "request": "^2.67.0"
+    "request": "^2.67.0",
+    "sqlite3": "^3.1.1"
   },
   "devDependencies": {
     "gulp": "^3.9.0",

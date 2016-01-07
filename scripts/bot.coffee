@@ -21,6 +21,7 @@
 #   yamabo traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
 #   yamabo whois [IPADDR]        -- Execute whois [IPADDR]
 #   yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
+#   yamabo center [STATION1],[STATION2],[STATION3] -- Get center among stations
 #
 
 Botkit  = require 'botkit'
@@ -77,6 +78,7 @@ yamabo ping [IPADDR]         -- Execute ping [IPADDR] from bot server
 yamabo traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
 yamabo whois [IPADDR]        -- Execute whois [IPADDR]
 yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
+yamabo center [STATION1],[STATION2],[STATION3] -- Get center among stations
 ```
                      '''
 
@@ -191,6 +193,13 @@ controller.hears ['^vote (.*)'], 'direct_message,direct_mention,mention', (bot, 
   bot.reply message, "集計するときは-1を忘れずに(yamaboを除く)"
   bot.reply message, "-----------------------------------------"
   helper.postMessages message, items
+
+controller.hears ['^center (.*)'], 'direct_message,direct_mention,mention', (bot, message) ->
+  matches = message.text.match /center (.*)/i
+  params  = matches[1].trim().split(" ")
+  items   = params.slice(0).join(" ").split(",")
+  helper.getCenter items, (row) ->
+    bot.reply message, "中心は「#{row.station_name}」駅だな"
 
 # morning cron
 new cron '00 00 7 * * *', () ->

@@ -11,6 +11,7 @@
 cheerio         = require 'cheerio'
 cheerio-httpcli = require 'cheerio-httpcli'
 request         = require 'request'
+sqlite3         = require('sqlite3').verbose()
 
 module.exports =
 
@@ -111,3 +112,34 @@ module.exports =
         self.addReactions ['+1', 'scream'], body.channel, body.ts
         self.postMessages msg, texts
 
+  average: (array) ->
+    res = 0
+    for item in array
+      res = res + item
+    res = res/array.length
+
+  getCenter: (stations, callback) ->
+    db = new sqlite3.Database './db.sqlite3'
+    self = this
+    db.serialize () ->
+      lons = []
+      lats = []
+    
+      getPos = (names, callback, final) ->
+        name = names.pop()
+        if name?
+          name = name.replace(/駅/, "")
+          db.get "SELECT * FROM stations WHERE station_name LIKE ?", name, (err, row) ->
+            callback err, row
+            getPos names, callback, final
+        else
+          final()
+    
+      getPos stations, (err, row) ->
+        lons.push row.lon
+        lats.push row.lat
+      , () ->
+        lon = self.average lons
+        lat = self.average lats
+        db.get "SELECT station_name, (lon-?)*(lon-?) + (lat-?)*(lat-?) AS dist FROM stations ORDER BY dist", lon, lon, lat, lat, (err, row) ->
+          callback row

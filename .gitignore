@@ -3,3 +3,5 @@ node_modules
 .hubot_history
 yamada-bot.sh
 .vagrant
+station20151215free.csv
+db.sqlite3
