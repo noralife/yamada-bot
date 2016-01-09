@@ -13,6 +13,14 @@ parse   = require 'csv-parse'
 db = new sqlite3.Database "./db.sqlite3"
 db.serialize () ->
 
+  db.run """
+    CREATE TABLE IF NOT EXISTS zatsudan (
+      teamid INT,
+      userid INT,
+      context TEXT
+   )
+  """
+
   db.run "DROP TABLE IF EXISTS stations"
   db.run """
     CREATE TABLE IF NOT EXISTS stations (

@@ -30,6 +30,7 @@ cron    = require('cron').CronJob
 helper  = require './helper.coffee'
 os      = require 'os'
 request = require 'request'
+sqlite3 = require('sqlite3').verbose()
 
 controller = Botkit.slackbot debug: false
 
@@ -56,15 +57,28 @@ respond = (response, convo, message) ->
       convo.say 'バイバイ'
       convo.next()
     else
-      key = process.env.DOCOMO_TOKEN
-      url = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=' + key
-      request.post
-        url: url
-        json:
-          utt: query
-        , (err, response, body) ->
-          respond response, convo, body.utt
-          convo.next()
+      # get context from DB
+      console.log response
+      db = new sqlite3.Database './db.sqlite3'
+      db.get "SELECT * FROM zatsudan WHERE userid LIKE ? AND  teamid LIKE ?", response.user, response.team, (err, row) ->
+        if row?
+          context = row.context
+        key = process.env.DOCOMO_TOKEN
+        url = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=' + key
+        request.post
+          url: url
+          json:
+            utt: query
+            context: context if context
+          , (err, res, body) ->
+            console.log body
+            if ! context?
+              insert = db.prepare "INSERT INTO zatsudan VALUES (?,?,?)"
+              insert.run response.team, response.user, body.context
+              insert.finalize
+            db.close
+            respond response, convo, body.utt
+            convo.next()
 
 # yamabo help
 controller.hears ['^help'], 'direct_message,direct_mention,mention', (bot,message) ->
