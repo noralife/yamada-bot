@@ -22,6 +22,7 @@
 #   yamabo whois [IPADDR]        -- Execute whois [IPADDR]
 #   yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
 #   yamabo center [STATION1],[STATION2],[STATION3] -- Get center among stations
+#   yamabo chat          -- Start chatting with a bot. To end chatting, input Bye or bye
 #
 
 Botkit  = require 'botkit'
@@ -41,26 +42,29 @@ controller.hears ['yamabo', 'YAMABO', 'やまぼ', 'ヤマボ'], 'ambient', (bot
     if err?
       bot.botkit.log 'Failed to add emoji reaction :(', err
 
-# conversation
-controller.hears ['pizzatime'], 'ambient', (bot,message) ->
-  bot.startConversation message, askFlavor
+# yamabo chat
+controller.hears ['^chat'], 'direct_message,direct_mention,mention', (bot,message) ->
+  bot.startConversation message, greeting
 
-askFlavor = (response, convo) ->
-  convo.ask 'What flavor of pizza do you want?', (response, convo) ->
-    convo.say 'Awesome.'
-    askSize response, convo
-    convo.next()
+greeting = (response, convo) ->
+  respond response, convo, 'こんにちは'
 
-askSize = (response, convo) ->
-  convo.ask 'What size do you want?', (response, convo) ->
-    convo.say 'Ok.'
-    askWhereDeliver response, convo
-    convo.next()
-
-askWhereDeliver = (response, convo) ->
-  convo.ask 'So where do you want it delivered?', (response, convo) ->
-    convo.say 'Ok! Good by.'
-    convo.next()
+respond = (response, convo, message) ->
+  convo.ask message, (response, convo) ->
+    query = response['text'].trim()
+    if /^Bye|bye|またね|ばいばい|バイバイ|じゃあね|じゃあまた$/.test(query)
+      convo.say 'バイバイ'
+      convo.next()
+    else
+      key = process.env.DOCOMO_TOKEN
+      url = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=' + key
+      request.post
+        url: url
+        json:
+          utt: query
+        , (err, response, body) ->
+          respond response, convo, body.utt
+          convo.next()
 
 # yamabo help
 controller.hears ['^help'], 'direct_message,direct_mention,mention', (bot,message) ->
@@ -79,6 +83,7 @@ yamabo traceroute [IPADDR]   -- Execute traceroute [IPADDR] from bot server
 yamabo whois [IPADDR]        -- Execute whois [IPADDR]
 yamabo vote [TITLE] [ITEM1],[ITEM2],[ITEM3] -- Create vote template
 yamabo center [STATION1],[STATION2],[STATION3] -- Get center among stations
+yamabo chat          -- Start chatting with a bot. To end chatting, input Bye or bye
 ```
                      '''
 
