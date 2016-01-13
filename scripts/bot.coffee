@@ -43,6 +43,11 @@ controller.hears ['yamabo', 'YAMABO', 'やまぼ', 'ヤマボ'], 'ambient', (bot
     if err?
       bot.botkit.log 'Failed to add emoji reaction :(', err
 
+controller.hears ['tengu', 'TENGU', '天狗', 'てんぐ', 'テング'], 'ambient', (bot, message) ->
+  bot.api.reactions.add { timestamp: message.ts, channel: message.channel, name: 'yamada' }, (err, res) ->
+    if err?
+      bot.botkit.log 'Failed to add emoji reaction :(', err
+
 # yamabo chat
 controller.hears ['^chat'], 'direct_message,direct_mention,mention', (bot,message) ->
   bot.startConversation message, greeting
