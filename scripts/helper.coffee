@@ -48,7 +48,11 @@ module.exports =
     cheerio-httpcli.fetch 'http://www.yahoo.co.jp/', {}, (err, $, res)->
       items = []
       $('ul.emphasis > li > a').each ()->
-        items.push($(this).text())
+        news = $(this).text()
+                             .replace(/NEW$/, "")
+                             .replace(/写真$/, "")
+                             .replace(/動画$/, "")
+        items.push(news)
       callback(items)
   
   getDelayedTrain: (callback) ->
