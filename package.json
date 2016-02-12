@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/noralife/yamada-bot#readme",
   "dependencies": {
+    "coffee-script": "1.10.0",
     "botkit": "0.0.5",
     "cheerio": "^0.19.0",
     "cheerio-httpcli": "^0.3.8",
