@@ -49,9 +49,9 @@ module.exports =
       items = []
       $('ul.emphasis > li > a').each ()->
         news = $(this).text()
-                             .replace(/NEW$/, "")
-                             .replace(/写真$/, "")
-                             .replace(/動画$/, "")
+                      .replace(/NEW$/, "")
+                      .replace(/写真$/, "")
+                      .replace(/動画$/, "")
         items.push(news)
       callback(items)
   
