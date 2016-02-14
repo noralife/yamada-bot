@@ -258,7 +258,7 @@ new cron '00 30 17 * * 1-5', () ->
   helper.isHoliday () ->
     bot.say { channel: ch, text: '社畜の通過... おっと休日だったか' }
   , () ->
-    bot.say { channel: ch, text: '社畜の通過点...カイタはあと30分な' }
+    bot.say { channel: ch, text: '社畜の通過点...今週はヤマダの定時チャレンジ。みんな応援しろよな' }
 , null, true, "Asia/Tokyo"
 
 # evening cron 2
@@ -267,5 +267,5 @@ new cron '00 00 18 * * 1-5', () ->
   helper.isHoliday () ->
     null
   , () ->
-    bot.say { channel: ch, text: 'カイタも帰れよ。社畜かよ。' }
+    bot.say { channel: ch, text: 'さすがにヤマダは帰ったか。お前らも帰れよ。社畜かよ。' }
 , null, true, "Asia/Tokyo"
