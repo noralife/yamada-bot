@@ -54,7 +54,14 @@ module.exports =
                       .replace(/動画$/, "")
         items.push(news)
       callback(items)
-  
+
+  getPollen: (callback) ->
+    cheerio-httpcli.fetch 'http://www.tenki.jp/pollen/3/16/', {}, (err, $, res)->
+      pollens = []
+      $('table#AreaWeathers tr:nth-of-type(4) td img').each ()->  
+        pollens.push($(this).attr('title'))
+      callback(pollens)
+
   getDelayedTrain: (callback) ->
     cheerio-httpcli.fetch 'http://api.tetsudo.com/traffic/atom.xml?kanto', {}, (err, $, res)->
       trains = []

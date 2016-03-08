@@ -12,6 +12,7 @@
 #   yamabo help          -- Display this help
 #   yamabo ping          -- Check whether a bot is alive
 #   yamabo weather       -- Ask today's weather
+#   yamabo pollen        -- Ask today's pollen
 #   yamabo yahoo-news    -- Display current yahoo news highlight
 #   yamabo kindle        -- Display daily kindle sale book
 #   yamabo train         -- Display train status
@@ -92,6 +93,7 @@ controller.hears ['^help'], 'direct_message,direct_mention,mention', (bot,messag
 yamabo help          -- Display this help
 yamabo ping          -- Check whether a bot is alive
 yamabo weather       -- Ask today's weather
+yamabo pollen        -- Ask today's pollen
 yamabo yahoo-news    -- Display current yahoo news highlight
 yamabo kindle        -- Display daily kindle sale book
 yamabo train         -- Display train status
@@ -173,6 +175,11 @@ controller.hears ['^yahoo-news'], 'direct_message,direct_mention,mention', (bot,
     for item in items
       bot.reply message, "・#{item}"
 
+# yamabo pollen
+controller.hears ['^pollen'], 'direct_message,direct_mention,mention', (bot, message) ->
+  helper.getPollen (pollens) ->
+    bot.reply message, "今日は「花粉は#{pollens[0]}」ってさ"
+
 # yamabo kindle
 controller.hears ['^kindle'], 'direct_message,direct_mention,mention', (bot, message) ->
   helper.getKindleBook (book) ->
@@ -238,18 +245,22 @@ new cron '00 00 7 * * *', () ->
     helper.getKindleBook (book) ->
       bot.say { channel: ch, text: "[Kindleセール本]\n#{book}"}
       helper.getWeather (weathers) ->
-        msg = "[天気]\n今日: #{weathers[0]['telop']}"
-        msg += " - 最高気温は#{weathers[0]['maxtemp']}度" if weathers[0]['maxtemp']?
-        msg += "\n明日: #{weathers[1]['telop']}"
-        msg += " - 最高気温は#{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
-        bot.say { channel: ch, text: msg}
-        helper.getDelayedTrain (trains) ->
-          bot.say { channel: ch, text: '[電車遅延情報]' }
-          if trains.length > 0
-            for train in trains
-              bot.say { channel: ch, text: "・#{train}" }
-          else
-            bot.say { channel: ch, text: '遅延なし' }
+        helper.getPollen (pollens) -> 
+          msg = "[天気]\n今日: #{weathers[0]['telop']}"
+          msg += " - 最高気温 #{weathers[0]['maxtemp']}度" if weathers[0]['maxtemp']?
+          msg += " - 花粉 #{pollens[0]}"
+          msg += "\n明日: #{weathers[1]['telop']}"
+          msg += " - 最高気温 #{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
+          msg += " - 花粉 #{pollens[1]}"
+          bot.say { channel: ch, text: msg}
+          
+          helper.getDelayedTrain (trains) ->
+            bot.say { channel: ch, text: '[電車遅延情報]' }
+            if trains.length > 0
+              for train in trains
+                bot.say { channel: ch, text: "・#{train}" }
+            else
+              bot.say { channel: ch, text: '遅延なし' }
 , null, true, "Asia/Tokyo"
 
 # evening cron 1
