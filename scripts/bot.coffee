@@ -234,7 +234,7 @@ controller.hears ['^center (.*)'], 'direct_message,direct_mention,mention', (bot
     bot.reply message, "中心は「#{row.station_name}」駅だな"
 
 # morning cron
-new cron '00 00 7 * * *', () ->
+new cron '00 17 7 * * *', () ->
   ch = process.env.CHANNEL
   bot.say { channel: ch, text: 'おはよう。今日も飛ばしていこうぜ。' }
   helper.getYahooNews (items) ->
@@ -269,7 +269,7 @@ new cron '00 30 17 * * 1-5', () ->
   helper.isHoliday () ->
     bot.say { channel: ch, text: '社畜の通過... おっと休日だったか' }
   , () ->
-    bot.say { channel: ch, text: '社畜の通過点...今週はヤマダの定時チャレンジ。みんな応援しろよな' }
+    bot.say { channel: ch, text: '社畜の通過点...カイタはあと30分な' }
 , null, true, "Asia/Tokyo"
 
 # evening cron 2
@@ -278,5 +278,5 @@ new cron '00 00 18 * * 1-5', () ->
   helper.isHoliday () ->
     null
   , () ->
-    bot.say { channel: ch, text: 'さすがにヤマダは帰ったか。お前らも帰れよ。社畜かよ。' }
+    bot.say { channel: ch, text: 'カイタも帰れよ。社畜かよ。' }
 , null, true, "Asia/Tokyo"
