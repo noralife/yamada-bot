@@ -234,7 +234,7 @@ controller.hears ['^center (.*)'], 'direct_message,direct_mention,mention', (bot
     bot.reply message, "中心は「#{row.station_name}」駅だな"
 
 # morning cron
-new cron '00 17 7 * * *', () ->
+new cron '00 00 7 * * *', () ->
   ch = process.env.CHANNEL
   bot.say { channel: ch, text: 'おはよう。今日も飛ばしていこうぜ。' }
   helper.getYahooNews (items) ->
