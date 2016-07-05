@@ -245,22 +245,19 @@ new cron '00 00 7 * * *', () ->
     helper.getKindleBook (book) ->
       bot.say { channel: ch, text: "[Kindleセール本]\n#{book}"}
       helper.getWeather (weathers) ->
-        helper.getPollen (pollens) -> 
-          msg = "[天気]\n今日: #{weathers[0]['telop']}"
-          msg += " - 最高気温 #{weathers[0]['maxtemp']}度" if weathers[0]['maxtemp']?
-          msg += " - 花粉 #{pollens[0]}"
-          msg += "\n明日: #{weathers[1]['telop']}"
-          msg += " - 最高気温 #{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
-          msg += " - 花粉 #{pollens[1]}"
-          bot.say { channel: ch, text: msg}
+        msg = "[天気]\n今日: #{weathers[0]['telop']}"
+        msg += " - 最高気温 #{weathers[0]['maxtemp']}度" if weathers[0]['maxtemp']?
+        msg += "\n明日: #{weathers[1]['telop']}"
+        msg += " - 最高気温 #{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
+        bot.say { channel: ch, text: msg}
           
-          helper.getDelayedTrain (trains) ->
-            bot.say { channel: ch, text: '[電車遅延情報]' }
-            if trains.length > 0
-              for train in trains
-                bot.say { channel: ch, text: "・#{train}" }
-            else
-              bot.say { channel: ch, text: '遅延なし' }
+        helper.getDelayedTrain (trains) ->
+          bot.say { channel: ch, text: '[電車遅延情報]' }
+          if trains.length > 0
+            for train in trains
+              bot.say { channel: ch, text: "・#{train}" }
+          else
+            bot.say { channel: ch, text: '遅延なし' }
 , null, true, "Asia/Tokyo"
 
 # evening cron 1
