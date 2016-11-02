@@ -97,6 +97,7 @@ yamabo pollen        -- Ask today's pollen
 yamabo yahoo-news    -- Display current yahoo news highlight
 yamabo kindle        -- Display daily kindle sale book
 yamabo train         -- Display train status
+yamabo morning       -- Display yahoo-news, kindle, weather and train
 yamabo say [SOMETHING]       -- Yamada-bot say SOMETHING in general
 yamabo emotion [SOMETHING]   -- Analyze [SOMETHING] using emotion API
 yamabo ping [IPADDR]         -- Execute ping [IPADDR] from bot server
@@ -232,6 +233,31 @@ controller.hears ['^center (.*)'], 'direct_message,direct_mention,mention', (bot
   items   = params.slice(0).join(" ").split(",")
   helper.getCenter items, (row) ->
     bot.reply message, "中心は「#{row.station_name}」駅だな"
+
+# yamabo morning
+controller.hears ['^morning'], 'direct_message,direct_mention,mention', (bot, message) ->
+  bot.reply message, 'おはよう。今日も飛ばしていこうぜ。'
+  helper.getYahooNews (items) ->
+    bot.reply message, '[Yahoo News]'
+
+    for item in items
+      bot.reply message, "・#{item}"
+    helper.getKindleBook (book) ->
+      bot.reply message, "[Kindleセール本]\n#{book}"
+      helper.getWeather (weathers) ->
+        msg = "[天気]\n今日: #{weathers[0]['telop']}"
+        msg += " - 最高気温 #{weathers[0]['maxtemp']}度" if weathers[0]['maxtemp']?
+        msg += "\n明日: #{weathers[1]['telop']}"
+        msg += " - 最高気温 #{weathers[1]['maxtemp']}度" if weathers[1]['maxtemp']?
+        bot.reply message, msg
+          
+        helper.getDelayedTrain (trains) ->
+          bot.reply message, '[電車遅延情報]'
+          if trains.length > 0
+            for train in trains
+              bot.reply message, "・#{train}"
+          else
+            bot.reply message, '遅延なし'
 
 # morning cron
 new cron '00 00 7 * * *', () ->

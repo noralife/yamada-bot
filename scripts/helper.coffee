@@ -41,7 +41,7 @@ module.exports =
   
   getKindleBook: (callback) ->
     cheerio-httpcli.fetch 'http://www.amazon.co.jp/b?node=3338926051', {}, (err, $, res)->
-      book =  $('h3').text()
+      book =  $('#top h3').text()
       callback(book)
   
   getYahooNews: (callback) ->
