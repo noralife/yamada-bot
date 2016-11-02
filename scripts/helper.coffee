@@ -58,7 +58,7 @@ module.exports =
   getPollen: (callback) ->
     cheerio-httpcli.fetch 'http://www.tenki.jp/pollen/3/16/', {}, (err, $, res)->
       pollens = []
-      $('table#AreaWeathers tr:nth-of-type(4) td img').each ()->  
+      $('table#AreaWeathers tr:nth-of-type(4) td img').each ()->
         pollens.push($(this).attr('title'))
       callback(pollens)
 
