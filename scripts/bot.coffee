@@ -33,7 +33,7 @@ os      = require 'os'
 request = require 'request'
 sqlite3 = require('sqlite3').verbose()
 
-controller = Botkit.slackbot debug: false
+controller = Botkit.slackbot {retry: Infinity, debug: false}
 
 bot = controller.spawn token:process.env.SLACK_TOKEN
   .startRTM()
