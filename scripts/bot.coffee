@@ -38,6 +38,9 @@ controller = Botkit.slackbot {retry: Infinity, debug: true}
 bot = controller.spawn token:process.env.SLACK_TOKEN
   .startRTM()
 
+controller.on 'tick', (bot, event) ->
+  return null
+
 # add good to yamabo mention
 controller.hears ['yamabo', 'YAMABO', 'やまぼ', 'ヤマボ'], 'ambient', (bot, message) ->
   bot.api.reactions.add { timestamp: message.ts, channel: message.channel, name: '+1' }, (err, res) ->
