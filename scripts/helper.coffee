@@ -130,7 +130,7 @@ module.exports =
     res = res/array.length
 
   getCenter: (stations, callback) ->
-    db = new sqlite3.Database './db.sqlite3'
+    db = new sqlite3.Database '/home/yamabo/yamada-bot/db.sqlite3'
     self = this
     db.serialize () ->
       lons = []
